@@ -110,7 +110,7 @@ func UpdateTable() gin.HandlerFunc {
 		}
 
 		filter := bson.M{"table_id": tableId}
-		result, err := tableCollection.UpdateOne(
+		_, err := tableCollection.UpdateOne(
 			ctx,
 			filter,
 			bson.D{
@@ -125,6 +125,6 @@ func UpdateTable() gin.HandlerFunc {
 			return
 		}
 		defer cancel()
-		c.JSON(http.StatusOK, result)
+		c.JSON(http.StatusOK, "table item updated succesfully")
 	}
 }
