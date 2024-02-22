@@ -72,6 +72,7 @@ func GetOrderItemsByOrder() gin.HandlerFunc {
 
 func itemsByOrder(id string) (OrderItems []primitive.M, err error) {
 	var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+	defer cancel()
 
 	matchStage := bson.D{{"$match", bson.D{{"order_id", id}}}}
 	lookupStage := bson.D{{"$lookup", bson.D{{"from", "food"}, {"localField", "food_id"}, {"foreignField", "food_id"}, {"as", "food"}}}}
@@ -81,31 +82,10 @@ func itemsByOrder(id string) (OrderItems []primitive.M, err error) {
 	unWindOrderStage := bson.D{{"$unwind", bson.D{{"path", "$order"}, {"preserveNullAndEmptyArrays", true}}}}
 
 	lookupTableStage := bson.D{{"$lookup", bson.D{{"from", "table"}, {"localField", "order.table_id"}, {"foreignField", "table_id"}, {"as", "table"}}}}
-	unWindTableStage := bson.D{{"#unwind", bson.D{{"path", "$table"}, {"preserveNullAndEmptyArrays", true}}}}
+	unWindTableStage := bson.D{{"$unwind", bson.D{{"path", "$table"}, {"preserveNullAndEmptyArrays", true}}}}
 
-	projectStage := bson.D{
-		{"$project", bson.D{
-			{"id", 0},
-			{"amount", "$food.price"},
-			{"total_count", 1},
-			{"food_name", "$food.name"},
-			{"food_image", "$food.food_image"},
-			{"table_number", "$table.table_number"},
-			{"table_id", "$table.table_id"},
-			{"order_id", "#order.order_id"},
-			{"price", "$food.price"},
-			{"quantity", 1},
-		}}}
-	groupStage := bson.D{{"$group", bson.D{{"_id", bson.D{{"order_id", "$order_id"}, {"table_id", "$table_id"}, {"table_number", "$table_number"}}}, {"payment_due", bson.D{{"$sum", "$amount"}}}, {"total_count", bson.D{{"$sum", 1}}}, {"order_items", bson.D{{"$push", "$$ROOT"}}}}}}
+	groupStage := bson.D{{"$group", bson.D{{"_id", bson.D{{"order_id", "$order_id"}, {"table_id", "$table_id"}, {"table_number", "$table_number"}}}, {"payment_due", bson.D{{"$sum", "$unit_price"}}}, {"total_count", bson.D{{"$sum", 1}}}, {"order_items", bson.D{{"$push", "$$ROOT"}}}}}}
 
-	projectStage2 := bson.D{
-		{"project", bson.D{
-			{"id", 0},
-			{"payment_due", 1},
-			{"total_count", 1},
-			{"table_number", "$_id.table_number"},
-			{"order_items", 1},
-		}}}
 	result, err := orderItemCollection.Aggregate(ctx, mongo.Pipeline{
 		matchStage,
 		lookupStage,
@@ -114,16 +94,14 @@ func itemsByOrder(id string) (OrderItems []primitive.M, err error) {
 		unWindOrderStage,
 		lookupTableStage,
 		unWindTableStage,
-		projectStage,
 		groupStage,
-		projectStage2})
+	})
 	if err != nil {
 		panic(err)
 	}
 	if err = result.All(ctx, &OrderItems); err != nil {
 		panic(err)
 	}
-	defer cancel()
 	return OrderItems, err
 }
 
