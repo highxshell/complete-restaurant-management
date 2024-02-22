@@ -618,3 +618,172 @@ Response:
 }
 ```
 
+- **update OrderItem Function (POST REQUEST)**
+
+  http://localhost:8000/orderItems/65d75bff4f07e877e98a4151
+
+```json
+{
+    "Quantity": "L",
+    "Unit_price": 1500,
+    "Food_id": "65d746afdf3baf635a35e2be",
+    "Order_id": "6530a906ce02c4c8c1893f90"
+}
+```
+
+Response: "orderItem updated succesfully"
+
+- **View all the Invoices in db GET REQUEST**
+
+  http://localhost:8000/invoices
+
+```json
+[
+    {
+        "_id": "6530aaf5bf2fe5dde0bcad6e",
+        "created_at": "2023-10-19T04:05:09Z",
+        "invoice_id": "6530aaf5bf2fe5dde0bcad6e",
+        "order_id": "6530a879ce02c4c8c1893f8e",
+        "payment_due_date": "2023-10-20T04:05:09Z",
+        "payment_method": "CARD",
+        "payment_status": "PENDING",
+        "updated_at": "2023-10-19T04:07:12Z"
+    },
+    {
+        "_id": "65d766fc64083147e0db46ca",
+        "created_at": "2024-02-22T15:23:40Z",
+        "invoice_id": "65d766fc64083147e0db46ca",
+        "order_id": "65d75bff4f07e877e98a414f",
+        "payment_due_date": "2024-02-23T15:23:40Z",
+        "payment_method": "CASH",
+        "payment_status": "PENDING",
+        "updated_at": "2024-02-22T15:23:40Z"
+    }
+]
+```
+
+- **View Invoice by ID in db GET REQUEST**
+
+  http://localhost:8000/invoices/65d766fc64083147e0db46ca
+
+Response:
+
+```json
+{
+    "Invoice_id": "65d766fc64083147e0db46ca",
+    "Payment_method": "CASH",
+    "Order_id": "65d75bff4f07e877e98a414f",
+    "Payment_status": "PENDING",
+    "Payment_due": 76500,
+    "Table_number": null,
+    "Payment_due_date": "0001-01-01T00:00:00Z",
+    "Order_details": [
+        {
+            "_id": "65d75bff4f07e877e98a4151",
+            "created_at": "2024-02-22T14:36:47Z",
+            "food": {
+                "_id": "65d746afdf3baf635a35e2be",
+                "created_at": "2024-02-22T13:05:51Z",
+                "food_id": "65d746afdf3baf635a35e2be",
+                "food_image": "https://unsplash.com/photos/zW8wA4QwS2M",
+                "menu_id": "6530a531ce02c4c8c1893f88",
+                "name": "Hinkaly",
+                "price": 1000,
+                "updated_at": "2024-02-22T13:05:51Z"
+            },
+            "food_id": "65d746afdf3baf635a35e2be",
+            "order": {
+                "_id": "65d75bff4f07e877e98a414f",
+                "created_at": "2024-02-22T14:36:47Z",
+                "order_date": "2024-02-22T14:36:47Z",
+                "order_id": "65d75bff4f07e877e98a414f",
+                "table_id": "65d74f8b100d014dd72c4c51",
+                "updated_at": "2024-02-22T14:36:47Z"
+            },
+            "order_id": "65d75bff4f07e877e98a414f",
+            "order_item_id": "65d75bff4f07e877e98a4151",
+            "quantity": "L",
+            "table": {
+                "_id": "65d74f8b100d014dd72c4c51",
+                "created_at": "2024-02-22T13:43:39Z",
+                "number_of_guests": 2,
+                "table_id": "65d74f8b100d014dd72c4c51",
+                "table_number": 7,
+                "updated_at": "2024-02-22T13:43:39Z"
+            },
+            "unit_price": 1500,
+            "updated_at": "2024-02-22T15:18:38Z"
+        },
+        {
+            "_id": "65d75bff4f07e877e98a4152",
+            "created_at": "2024-02-22T14:36:47Z",
+            "food": {
+                "_id": "65d746afdf3baf635a35e2be",
+                "created_at": "2024-02-22T13:05:51Z",
+                "food_id": "65d746afdf3baf635a35e2be",
+                "food_image": "https://unsplash.com/photos/zW8wA4QwS2M",
+                "menu_id": "6530a531ce02c4c8c1893f88",
+                "name": "Hinkaly",
+                "price": 1000,
+                "updated_at": "2024-02-22T13:05:51Z"
+            },
+            "food_id": "65d746afdf3baf635a35e2be",
+            "order": {
+                "_id": "65d75bff4f07e877e98a414f",
+                "created_at": "2024-02-22T14:36:47Z",
+                "order_date": "2024-02-22T14:36:47Z",
+                "order_id": "65d75bff4f07e877e98a414f",
+                "table_id": "65d74f8b100d014dd72c4c51",
+                "updated_at": "2024-02-22T14:36:47Z"
+            },
+            "order_id": "65d75bff4f07e877e98a414f",
+            "order_item_id": "65d75bff4f07e877e98a4152",
+            "quantity": "S",
+            "table": {
+                "_id": "65d74f8b100d014dd72c4c51",
+                "created_at": "2024-02-22T13:43:39Z",
+                "number_of_guests": 2,
+                "table_id": "65d74f8b100d014dd72c4c51",
+                "table_number": 7,
+                "updated_at": "2024-02-22T13:43:39Z"
+            },
+            "unit_price": 75000,
+            "updated_at": "2024-02-22T15:13:17Z"
+        }
+    ]
+}
+```
+
+- **add Invoice Function (POST REQUEST)**
+
+  http://localhost:8000/invoices
+
+```json
+{
+    "Payment_method":"CASH",
+    "Payment_status":"PENDING",
+    "Order_id":"65d75bff4f07e877e98a414f"
+}
+```
+
+Response: 
+
+```json
+{
+    "InsertedID": "65d766fc64083147e0db46ca"
+}
+```
+
+- **update Order Function (POST REQUEST)**
+
+  http://localhost:8000/invoices/65d766fc64083147e0db46ca
+
+```json
+{
+    "Payment_method":"CARD",
+    "Payment_status":"PAID",
+    "Order_id":"6530a879ce02c4c8c1893f8e"
+}
+```
+
+Response: "invoice updated succesfully"
