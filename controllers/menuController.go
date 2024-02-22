@@ -125,7 +125,7 @@ func UpdateMenu() gin.HandlerFunc {
 			opt := options.UpdateOptions{
 				Upsert: &upsert,
 			}
-			result, err := menuCollection.UpdateOne(
+			_, err := menuCollection.UpdateOne(
 				ctx,
 				filter,
 				bson.D{
@@ -138,7 +138,7 @@ func UpdateMenu() gin.HandlerFunc {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": msg})
 			}
 			defer cancel()
-			c.JSON(http.StatusOK, result)
+			c.JSON(http.StatusOK, "menu updated successfully")
 		}
 	}
 }
